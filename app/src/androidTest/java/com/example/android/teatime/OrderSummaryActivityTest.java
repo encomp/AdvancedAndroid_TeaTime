@@ -18,6 +18,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
@@ -25,6 +26,10 @@ import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class OrderSummaryActivityTest {
+
+  private static final String emailMessage =
+      "I just ordered a delicious tea from TeaTime. Next time you are craving a tea, check them "
+          + "out!";
 
   @Rule
   public IntentsTestRule<OrderSummaryActivity> activityRule =
@@ -41,6 +46,10 @@ public class OrderSummaryActivityTest {
   public void clickSendEmailButton_SendsEmail() {
     onView(withId(R.id.send_email_button)).perform(click());
 
-    intended(allOf(hasAction(Intent.ACTION_SENDTO), hasData(Uri.parse("mailto:"))));
+    intended(
+        allOf(
+            hasAction(Intent.ACTION_SENDTO),
+            hasData(Uri.parse("mailto:")),
+            hasExtra(Intent.EXTRA_TEXT, emailMessage)));
   }
 }
